@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <title>{% block title %}Title{% endblock %}</title>
+</head>
+<body>
+    <div class="">
+        <nav class="navbar navbar-expand-sm navbar-light bg-light mb-2">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="{% url 'core:index' %}"><img class="rounded rounded-circle" src="{% static 'files/logo.jpg' %}" style="height: 40px;width: 40px;" alt=""></a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" style="font-size: 20px;" aria-current="page" href="{% url 'core:index' %}">Background Remover</a>
+                  </li>
+                  <li class="nav-item mt-1 ms-5">
+                    <a class="nav-link" style="font-size: 16px;" href="{% url 'core:index' %}">Home</a>
+                  </li>
+                  <li class="nav-item mt-1 text-end">
+                    <a class="nav-link" style="font-size: 16px;" id="account" href="{% url 'account:account' %}">Pricing</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </div>    
+    {% block body %}{% endblock %}
+
+    <script src="{% static 'js/all.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.1.min.js' %}"></script>
+    <script src="{% static 'js/fontawesome.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+
+    
+</body>
+
+</html>

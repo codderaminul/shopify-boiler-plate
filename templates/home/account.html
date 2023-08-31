@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title%} Home Page {% endblock %}
+{% block body%}
+
+<div class="container py-3 ">
+  <div class="row mb-5">
+    
+    {% csrf_token %}  
+    {% for plan in plans %}    
+    <div class="col-md-3 col-sm-6 bg-white me-5">
+        <div class="pricing-table-3 basic">
+            <div class="pricing-table-header">
+                <h4 class="text-center mt-4"><strong>{{plan.level|upper}}</strong></h4>
+                <h6 class="text-center">Buy Permit for remove image background</h6>
+            </div>
+            <h5 class="my-3 text-center"><strong>${{plan.price}}</strong> </h5>
+            <div class="pricing-body">
+                <ul class="" style="list-style: None;">
+                    <li><h6>* {{plan.image}} Images for ${{plan.price}}</h6></li>
+                    <li><h6>* Remove all image use this feature</h6></li>
+                </ul>
+                <a class="nav-link text-center my-4 btn btn-success py-2 text-light" onclick="goto_payment('{{plan.level}}','{{plan.price_id}}','{{plan.price}}','{{plan.image}}')" href="#">Buy Now</a>
+            </div>
+        </div>
+    </div>  
+    {% endfor %}
+  </div>
+
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    {% if messages %}
+    {% for message in messages %}
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    
+    Toast.fire({
+      icon: '{{ message.tags }}',
+      title: '{{ message }}'
+    })
+    {% endfor %}
+  {% endif %}
+
+  function removeAgainButton(product_id){
+      document.getElementById("removeBackgroundLink").addEventListener("click", function() {
+        var url = "/removeBG/"+product_id;
+        document.getElementById("removeBackgroundLink").href = url;  
+        var modal = document.getElementById("againRemove");
+        var modalInstance = bootstrap.Modal.getInstance(modal);
+        modalInstance.hide();
+    });
+  }
+
+
+
+  function goto_payment(level,price_id,price,image_num){
+        var CSRFToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+        var formdata = new FormData(); 
+        formdata.append("level",level)
+        formdata.append("price_id",price_id)
+        formdata.append("price",price)
+        formdata.append("image_num",image_num)
+        formdata.append("csrfmiddlewaretoken",CSRFToken)
+
+        fetch("/account/create-subscription/", {
+            method: "POST",
+            headers: new Headers(),
+            body: formdata,
+        })
+        .then((result) => { return result.json() })
+        .then((data) => { 
+          console.log('Result',data.url)
+          location.href = data.url;
+      
+      })
+  }
+  </script>
+
+
+{% endblock %}
+
+
+
+
+

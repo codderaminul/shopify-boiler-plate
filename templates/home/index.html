@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title%} Home Page {% endblock %}
+{% block body%}
+ 
+<div class="container py-3">
+  <h5 class=" mb-4">All Products</h5>
+
+  {% for product in page_obj %}
+  <div class="row shadow-sm bg-white my-3 border rounded p-2 align-items-center col-mb-30">
+      <div class="col-lg-1 col-sm-2">
+        {% if product.images %}
+          <img src="{{ product.images.0.src }}"  style="width: 100px; height: 80px; object-fit: cover;"/>
+        {% endif %}
+      </div>
+      <div class="col-lg-5 col-sm-4">
+        <h6 class="mb-0 ms-sm-4 text-larger fw-normal">{{ product.title }}</h6>
+        <h6 class="ms-sm-4 mt-sm-2">Total Gallery Image: {{ product.images|length }}</h6>
+      </div>
+      
+      <div class="col-lg-6 text-lg-end col-sm-6">
+        <a href="https://{{ current_shop.domain }}/admin/products/{{ product.id }}" class="btn btn-success m-0">Go To Product</a>
+    </div>
+
+  </div>
+  {% empty %}
+    <em class="note mx-5">There are no products in your store.</em>
+  {% endfor %}
+
+  
+  
+  
+
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    {% if messages %}
+    {% for message in messages %}
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    
+    Toast.fire({
+      icon: '{{ message.tags }}',
+      title: '{{ message }}'
+    })
+    {% endfor %}
+  {% endif %}
+
+  </script>
+
+
+{% endblock %}
